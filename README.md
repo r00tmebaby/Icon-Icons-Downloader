@@ -12,7 +12,7 @@ The downloader is based on Python but compiled to executable for easier usage wi
 The program is capable to download multiple icon packs automatically via pre-set icon range or list. It can also convert them from .png to 128 pixels .svg and .ico 16x16-128x128 32bit.
 
 <b>Reason for the program</b></br>
-First of all, learning new things and expertise in automation and secondly.. I am looking very often for icon packs for my projects but it's somethimes hard to find big icon packs with more 100+  sharing the same design. Even if you find a website that will give you an option to download the whole icon pack it's very likely that it will be only png not ico and svg, so you will have to convert them afterwards which is twice as much work. There are many websites that provide paid downloading service but that was not the point here since there are pleny free anyway. 
+First of all, learning new things, expertise in automation and lastly.. I am looking very often for icon packs for my projects but it's somethimes hard to find big icon packs with more 100+  sharing the same design. Even if you find a website that will give you an option to download the whole icon pack it's very likely that it will be only png not ico and svg, so you will have to convert them afterwards which is twice as much work. There are many websites that provide paid downloading service but that was not the point here since there are pleny free anyway. 
 
 I found https://icon-icons.com/ to be very nice website with a big icon database but unfortrunatelly you can not download the whole pack at once, which is very bad especially if you need all icons you have to download them one by one. So I decided create a program to automate the proccess.
 
