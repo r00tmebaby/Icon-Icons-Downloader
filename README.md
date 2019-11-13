@@ -7,7 +7,7 @@ Automatically download icon packs from https://icon-icons.com/  and convert them
 
 </br></br>
 <b>Code</b></br>
-The downloader is based on Python but compiled to executable for easier usage without the need to install all libraries dependancies.
+The downloader is based on Python but compiled to executable for easier usage without the need to install all dependancies.
 <br><br>
 <b>What it does?</b></br>
 The program is capable to download multiple icon packs automatically via pre-set icon range or list. It can also convert them from .png to 128 pixels .svg and .ico 16x16-128x128 32bit.
