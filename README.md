@@ -24,7 +24,10 @@ I found https://icon-icons.com/ to be very nice website with a big icon database
 <b>Usability</b>
 All you need ot do is to add the icon pack that you need in the "Download List", check the boxes if you want along with all png icons also ico and svg, select the download folder and press the "Start" button. The GUI window will be closed and console window will be opened where you can see the logs.
 
+<b>How to add Icon-Pack</b>
+The program can scrape all available icons in the website with selecting the range from 1 to 2000 and leaving the download list empty for example, but if you need particular icon list you can list them one by one with a coma delimiter in the downloading list.
 
+You have to list the icon pack number not name -> <img src="https://i.gyazo.com/bdccaa577875877cdf1d18b34908daa0.png"></img> in this case it's 2079. So if we need to download icon packs 56 and 2079 you list them 56,2079 then the range will not work and the proggram will proceed with the list.
 
+*Importnat: Please keep in mind that if you have listed something in the download list it will be in priority, so the range wont work until the list is completed. 
 
-<
