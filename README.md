@@ -29,5 +29,5 @@ The program can scrape all available icons in the website with selecting the ran
 
 You have to list the icon pack number not name -> <img src="https://i.gyazo.com/bdccaa577875877cdf1d18b34908daa0.png"></img> in this case it's 2079. So if we need to download icon packs 56 and 2079 you list them 56,2079 then the range will not work and the proggram will proceed with the list.
 
-*Importnat: Please keep in mind that if you have listed something in the download list it will be in priority, so the range wont work until the list is completed. 
+<b>*Importnat:</b><i> Please keep in mind that if you have listed something in the download list it will be in priority, so the range wont work until the list is completed. </i>
 
