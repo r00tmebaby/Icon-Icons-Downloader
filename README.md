@@ -1,5 +1,6 @@
 # Icon-Icons-Downloader
 Automatically download icon packs from https://icon-icons.com/  and convert them into .ico, .svg and .png format
+</br>
 <img src="https://i.gyazo.com/12d82c3e49a12db7e26b43736726d4ee.png">
 <b>Code</b></br>
 The downloader is based on Python but compiled to executable for easier usage without the need to install all libraries dependancies.
