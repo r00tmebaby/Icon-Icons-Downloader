@@ -61,62 +61,6 @@ def download(url, names):
         print(e)
         return False
 
-
-##################################################
-#  Background and Font Colours
-# Reference => *Nasir Khan (r0ot h3x49)  - **https://github.com/r0oth3x49** ##*
-###################################################
-class bcolors:
-    if os.name == "posix":
-        init(autoreset=True)
-        # colors foreground text:
-        fc = "\033[0;96m"
-        fg = "\033[0;92m"
-        fw = "\033[0;97m"
-        fr = "\033[0;91m"
-        fb = "\033[0;94m"
-        fy = "\033[0;33m"
-        fm = "\033[0;35m"
-
-        # colors background text:
-        bc = "\033[46m"
-        bg = "\033[42m"
-        bw = "\033[47m"
-        br = "\033[41m"
-        bb = "\033[44m"
-        by = "\033[43m"
-        bm = "\033[45m"
-
-        # colors style text:
-        sd = Style.DIM
-        sn = Style.NORMAL
-        sb = Style.BRIGHT
-    else:
-        init(autoreset=True)
-        # colors foreground text:
-        fc = Fore.CYAN
-        fg = Fore.GREEN
-        fw = Fore.WHITE
-        fr = Fore.RED
-        fb = Fore.BLUE
-        fy = Fore.YELLOW
-        fm = Fore.MAGENTA
-
-        # colors background text:
-        bc = Back.CYAN
-        bg = Back.GREEN
-        bw = Back.WHITE
-        br = Back.RED
-        bb = Back.BLUE
-        by = Fore.YELLOW
-        bm = Fore.MAGENTA
-
-        # colors style text:
-        sd = Style.DIM
-        sn = Style.NORMAL
-        sb = Style.BRIGHT
-
-
 def get_numbers_from_link():
     icon_pack = []
     icon_links = str(config.get("Icons", "downloadList")).strip()
@@ -151,12 +95,8 @@ def convertICO(dir, type):
                 return
 
 
-def get_valid_filename(vTEXT, deletechars='#*%?:"\'/^<>|'):
-    vTEXT = re.sub(r'(https|http)?:\/\/(\w|\.|\/|\?|\=|\&|\%)*\b', '', vTEXT, flags=re.MULTILINE)
-    for c in deletechars:
-        vTEXT = vTEXT.replace(c, '-')
-    return vTEXT.replace("-", "").lstrip()
-
+def get_valid_filename(filename):
+    return re.sub(r'[\\\\/*?:"<>|]'," ",filename)
 
 def lazyLoader(proccess):
     thread = threading.Thread(target=proccess, daemon=True)
@@ -214,9 +154,11 @@ layout = [
                       ]]), element_justification="center", justification="center")
 
          ],
+        [sg.Col(
+            layout=([[sg.Output(size=(170, 20))]]), element_justification="center", justification="center")
 
-    ))],
-    [sg.Col(layout=([[sg.Output(size=(150, 40))]]), element_justification="center", justification="center")],
+        ],
+    ), element_justification="center")],
 ]
 
 
@@ -247,96 +189,99 @@ while True:
              config.set('Convert', 'icosizes128', str(values['_ico128_']))
              with open(configPath, "w+") as f:
                  config.write(f)
+             break
 
-             page = 1
-             total = 0
-             temp_counter = 0
-             http = urllib3.PoolManager()
+page = 1
+total = 0
+temp_counter = 0
+http = urllib3.PoolManager()
 
-             for icons_number in get_numbers_from_link():
-                 ico_paths = []
-                 icons_number = int(icons_number)
-                 count_temp = 0
-                 while True:
-                     count = 0
-                     url = 'https://icon-icons.com/pack/Simplicio/{}&page={}'.format(icons_number, page)
-                     response = http.request('GET', url)
-                     soup = BSHTML(response.data, "html.parser")
-                     images = soup.findAll('img')
-                     try:
-                         pack_name = get_valid_filename(str(re.findall("<h1>(.*?)</h1>", str(soup))[0])).replace(
-                             "Pack",
-                             "")
-                     except:
-                         icons_number += 1
-                         page = 1
-                         continue
 
-                     imageData = re.findall("data-original=(\".*?)\"", str(images))
-                     newDir = os.path.join(config.get("Icons", "dlpath"), pack_name)
 
-                     if len(imageData) == 0:
-                         config.set("Icons", "lastdownload", str(int(icons_number) + 1))
-                         with open(configPath, "w+") as f:
-                             config.write(f)
-                         if config.getboolean("Convert", 'icosizes16'):
-                             sys.stdout.write("%sConvert 16x16 Icons\n" % (bcolors.fg))
-                             convertICO(ico_paths, type=16)
-                         if config.getboolean("Convert", 'icosizes24'):
-                             sys.stdout.write("%sConvert 24x24 Icons Pack\n" % (bcolors.fg))
-                             convertICO(ico_paths, type=24)
-                         if config.getboolean("Convert", 'icosizes32'):
-                             sys.stdout.write("%sConvert 32x32 Icons Pack\n" % (bcolors.fg))
-                             convertICO(ico_paths, type=32)
-                         if config.getboolean("Convert", 'icosizes48'):
-                             sys.stdout.write("%sConvert 48x48 Icons Pack\n" % (bcolors.fg))
-                             convertICO(ico_paths, type=48)
-                         if config.getboolean("Convert", 'icosizes64'):
-                             sys.stdout.write("%sConvert 64x64 Icons Pack\n" % (bcolors.fg))
-                             convertICO(ico_paths, type=64)
-                         if config.getboolean("Convert", 'icosizes128'):
-                             sys.stdout.write("%sConvert 128x128 Icons Pack\n" % (bcolors.fg))
-                             convertICO(ico_paths, type=128)
-                         temp_counter += 1
-                         icons_number += 1
-                         page = 1
-                         continue
+for icons_number in get_numbers_from_link():
 
-                     if not os.path.isdir(newDir):
-                         try:
-                             os.mkdir(newDir)
-                         except:
-                             sys.stdout.write("%sDirectory %s can not be created \n" % (bcolors.fr, newDir))
-                             continue
+    ico_paths = []
+    icons_number = int(icons_number)
+    count_temp = 0
+    while True:
+        count = 0
+        url = 'https://icon-icons.com/pack/Simplicio/{}&page={}'.format(icons_number, page)
+        response = http.request('GET', url)
+        soup = BSHTML(response.data, "html.parser")
+        images = soup.findAll('img')
+        pack_name = get_valid_filename(str(re.findall("<h1>(.*?)</h1>", str(soup))[0])).replace("Pack","")
+        imageData = re.findall("data-original=(\".*?)\"", str(images))
+        newDir = os.path.join(config.get("Icons", "dlpath"), pack_name)
 
-                         if len(get_numbers_from_link()) == temp_counter:
-                             print("The icon packs {} were successfully downloaded".format(pack_name))
-                         break
 
-                     for eachLink in imageData:
+        if len(imageData) == 0:
+            config.set("Icons", "lastdownload", str(int(icons_number) + 1))
+            with open(configPath, "w+") as f:
+                config.write(f)
+            if config.getboolean("Convert", 'icosizes16'):
+                sys.stdout.write("Convert 16x16 Icons\n")
+                convertICO(ico_paths, type=16)
+            if config.getboolean("Convert", 'icosizes24'):
+                sys.stdout.write("Convert 24x24 Icons Pack\n")
+                convertICO(ico_paths, type=24)
+            if config.getboolean("Convert", 'icosizes32'):
+                sys.stdout.write("Convert 32x32 Icons Pack\n")
+                convertICO(ico_paths, type=32)
+            if config.getboolean("Convert", 'icosizes48'):
+                sys.stdout.write("Convert 48x48 Icons Pack\n")
+                convertICO(ico_paths, type=48)
+            if config.getboolean("Convert", 'icosizes64'):
+                sys.stdout.write("Convert 64x64 Icons Pack\n")
+                convertICO(ico_paths, type=64)
+            if config.getboolean("Convert", 'icosizes128'):
+                sys.stdout.write("Convert 128x128 Icons Pack\n")
+                convertICO(ico_paths, type=128)
+            temp_counter += 1
+            icons_number += 1
+            page = 1
+            continue
 
-                             total += 1
-                             count += 1
-                             count_temp += 1
+        if not os.path.isdir(newDir):
+            try:
+                os.mkdir(newDir)
+            except:
+                sys.stdout.write("Directory %s can not be created \n" % (newDir))
+                continue
 
-                             proper_name = eachLink.split("/")[::-1][0]
-                             if count == len(imageData):
-                                 page += 1
-                                 break
-                             else:
-                                 passed = True
-                                 try:
-                                     download(eachLink.strip("\""), newDir + "\\" + proper_name)
-                                 except EOFError as e:
-                                     passed = False
-                                     sys.stdout.write("%sFile %s can not be downloaded.%s\n" % (
-                                         bcolors.fr, os.path.join(newDir, proper_name), e))
-                                     continue
-                                 finally:
-                                     if passed:
-                                         ico_paths.append(os.path.join(newDir, proper_name))
-                                         sys.stdout.write(
-                                             "%s%08d | Pack %04d | Page %02d | Nr %04d | %s\n" %
-                                             (bcolors.fc, total, int(icons_number),
-                                              page, count_temp,
-                                              os.path.join(newDir, proper_name)))
+            if len(get_numbers_from_link()) == temp_counter:
+                print("The icon packs {} were successfully downloaded".format(pack_name))
+            break
+
+        for eachLink in imageData:
+
+            total += 1
+            count += 1
+            count_temp += 1
+            eachLink = str(eachLink.strip("\""))
+            proper_name = eachLink.split("/")[::-1][0]
+
+            try:
+                urllib.request.urlopen(eachLink)
+            except:
+                continue
+
+
+            if count == len(imageData):
+                page += 1
+                break
+            else:
+                passed = True
+                try:
+                    download(eachLink, newDir + "\\" + proper_name)
+                except EOFError as e:
+                    passed = False
+                    sys.stdout.write("File %s can not be downloaded.%s\n" % (os.path.join(newDir, proper_name), e))
+                    continue
+                finally:
+                    if passed:
+                        ico_paths.append(os.path.join(newDir, proper_name))
+                        sys.stdout.write(
+                            "%06d | Pack %04d | Page %02d | %04d | %s\n" %
+                            (total, int(icons_number),
+                             page, count_temp,
+                             os.path.join(newDir, proper_name)))
